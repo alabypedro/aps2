@@ -3,7 +3,7 @@ import pandas  # Data base
 import os      # Operations system package
 import tools   # tools.py
 
-# Class ------------------------------------------------------------
+# Class ----------------------------------------------------------
 
 
 class Color:
@@ -39,7 +39,10 @@ class PreMadeMessages:
 # Functions --------------------------------------------------------
 
 
-def db_update():
+def panda_db_update():
+    """Opens json data base file, and update the Panda's data base
+    """
+
     # Write the file path to the city_db.json on db directory
     FILE_PATH = os.path.join("db", "city_db.json")
 
@@ -51,6 +54,19 @@ def db_update():
     print(city_db)
 
 
+def main_menu():
+    panda_db_update()
+    user_menu_input = input("Escolha uma opção: ")
+
+    if user_menu_input.lower() == "s":
+        print(f"Até mais!")
+        exit(0)
+
+
 # Main -------------------------------------------------------------
 
-tools.clear()  # Clear the screen
+LOOP_FLAG = True
+
+while LOOP_FLAG:
+    tools.clear()  # Clear the screen
+    main_menu()
