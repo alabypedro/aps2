@@ -1,5 +1,5 @@
+import pandas as pd  # Data base
 import json    # Arquivos .json
-import pandas  # Data base
 import os      # Operations system package
 import tools   # tools.py
 
@@ -39,23 +39,21 @@ class PreMadeMessages:
 # Functions --------------------------------------------------------
 
 
-def panda_db_update():
-    """Opens json data base file, and update the Panda's data base
-    """
+def panda_db():
 
     # Write the file path to the city_db.json on db directory
     FILE_PATH = os.path.join("db", "city_db.json")
 
-    # Read the file and transfer to the pandas Data Base
-    with open(FILE_PATH, 'r', encoding='utf8') as db_file:
-        city_dict = json.load(db_file)
-        city_db = pandas.DataFrame(city_dict)
+    db = pd.read_json(FILE_PATH)  # Fills Panda's data base from json
 
-    print(city_db)
+    # Expandir a coluna 'cities' em linhas do DataFrame
+    db_expanded = pd.json_normalize(db['cities'])
+
+    print(db_expanded)
 
 
 def main_menu():
-    panda_db_update()
+    panda_db()
     user_menu_input = input("Escolha uma opção: ")
 
     if user_menu_input.lower() == "s":
