@@ -22,6 +22,9 @@ class Color:
 
 
 class ShowDB:
+    """Class used to handle the "Visualizar Base de Dados" Main Menu's option 
+    """
+
     def __init__(self, data):
         self.expand_db = pd.json_normalize(data['Cidades'])
         self.metropolis = self.expand_db[self.expand_db['População'] > 1000000]
@@ -39,6 +42,14 @@ class ShowDB:
 
     # Sort Options
     def handle_sort_options(self, current_option):
+        """Handle the sort options avaible inside the each of options on "Visualizar Base de Dados" section
+
+        Args:
+            current_option (int): The section between "Todas cidades/ metrópoles / área"
+
+        Returns:
+            function: If user_option == 0 returns visualize_db()
+        """
         print("\nOrganizar por: ")
         print("[1] A-Z [2] Área (km²) [3] População [4] Índice [0] 0 para voltar")
         user_input = input("Digite uma opção: ")
@@ -93,6 +104,11 @@ class ShowDB:
 # Functions --------------------------------------------------------
 
 def panda_db():
+    """Read city_db.json file and fills the Panda's data base
+
+    Returns:
+        Data: DataBase
+    """
 
     # Write the file path to the city_db.json on db directory
     FILE_PATH = os.path.join("db", "city_db.json")
@@ -103,6 +119,8 @@ def panda_db():
 
 
 def visualize_db():
+    """ Open a menu for visualize_db options, uses ShowDB class
+    """
     tools.clear()
     DataBase = ShowDB(panda_db())
 
@@ -153,6 +171,7 @@ def visualize_db():
 
 def main_menu():
     tools.clear()  # Clear the screen
+    # A header to identify the current section
     tools.session_header("Menu Principal")
 
     options_display = """
