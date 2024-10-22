@@ -24,7 +24,7 @@ class Color:
 class ShowDB:
     def __init__(self, data):
         self.expand_db = pd.json_normalize(data['Cidades'])
-        self.metropolis = self.expand_db[self.expand_db['População'] > 10000000]
+        self.metropolis = self.expand_db[self.expand_db['População'] > 1000000]
         self.largeCities = self.expand_db[self.expand_db['Área'] > 1000]
 
     # Print functions
@@ -38,11 +38,12 @@ class ShowDB:
         print(self.largeCities)
 
     # Sort Options
-    def handle_sorted_options(self, current_option):
-        print("\n[1] A-Z [2] Área (km²) [3] População [4] Índice [0] 0 para voltar")
-        user_input = input("Organizar por: ")
+    def handle_sort_options(self, current_option):
+        print("\nOrganizar por: ")
+        print("[1] A-Z [2] Área (km²) [3] População [4] Índice [0] 0 para voltar")
+        user_input = input("Digite uma opção: ")
 
-        # Handle the "Visualizar todas cidades" option
+        # Handle the "Visualizar todas cidades" options
         if current_option == 1:
             # Variables that handle the sorted result
             self.sortName = self.expand_db.sort_values(
@@ -53,30 +54,43 @@ class ShowDB:
                 by="População", ascending=False)
             self.sortIndex = self.expand_db.sort_index(ascending=True)
 
-            if user_input == '1':
-                tools.clear()
-                print(self.sortName)
-            elif user_input == '2':
-                tools.clear()
-                print(self.sortArea)
-            elif user_input == '3':
-                tools.clear()
-                print(self.sortPop)
-            elif user_input == '4':
-                tools.clear()
-                print(self.sortIndex)
-            elif user_input == '0':
-                return visualize_db()
-            else:
-                tools.input_error(user_input)
-
         if current_option == 2:
-            ...
+            self.sortName = self.metropolis.sort_values(
+                by="Cidade", ascending=True)
+            self.sortArea = self.metropolis.sort_values(
+                by="Área", ascending=False)
+            self.sortPop = self.metropolis.sort_values(
+                by="População", ascending=False)
+            self.sortIndex = self.largeCities.sort_index(ascending=True)
+
         if current_option == 3:
-            ...
+            self.sortName = self.largeCities.sort_values(
+                by="Cidade", ascending=True)
+            self.sortArea = self.largeCities.sort_values(
+                by="Área", ascending=False)
+            self.sortPop = self.largeCities.sort_values(
+                by="População", ascending=False)
+            self.sortIndex = self.largeCities.sort_index(ascending=True)
 
-            # Functions --------------------------------------------------------
+        if user_input == '1':
+            tools.clear()
+            print(self.sortName)
+        elif user_input == '2':
+            tools.clear()
+            print(self.sortArea)
+        elif user_input == '3':
+            tools.clear()
+            print(self.sortPop)
+        elif user_input == '4':
+            tools.clear()
+            print(self.sortIndex)
+        elif user_input == '0':
+            return visualize_db()
+        else:
+            tools.input_error(user_input)
 
+
+# Functions --------------------------------------------------------
 
 def panda_db():
 
@@ -105,27 +119,40 @@ def visualize_db():
     print(options_display)
     user_input = input("Escolha uma opção: ")
 
-    if user_input == '1':
+    if user_input == '1':  # Visualizar todas as cidades
         tools.clear()
+        tools.session_header("Todas cidades")
         DataBase.print_cities()
         while True:
-            DataBase.handle_sorted_options(1)
+            DataBase.handle_sort_options(1)
 
-    elif user_input == '2':
+    elif user_input == '2':  # Visualizar apenas metrópoles
+        tools.clear()
+        tools.session_header("Metrópoles")
         DataBase.print_metropolis()
-        # display_1 = "[1] A-Z [2] Tamanho [3] Área (km²) [0] 0 para voltar"
-        # user_input = input("Organizar por: ")
-        ...
-    elif user_input == '3':
+        while True:
+            DataBase.handle_sort_options(2)
+
+    elif user_input == '3':  # Visualizar apenas cidades com área > 1000 km²
+        tools.clear()
+        tools.session_header("Grandes cidades")
         DataBase.print_largeCities()
-    elif user_input == '0':
+        while True:
+            DataBase.handle_sort_options(3)
+
+    elif user_input == '0':  # Voltar
         main_menu()
-    elif user_input.lower() == 's':
+
+    elif user_input.lower() == 's':  # Sair
         exit(0)
         print("Até mais!")
 
+    else:
+        tools.input_error(user_input)
+
 
 def main_menu():
+    tools.clear()  # Clear the screen
     tools.session_header("Menu Principal")
 
     options_display = """
@@ -159,6 +186,5 @@ def main_menu():
 LOOP_FLAG = True
 
 while LOOP_FLAG:
-    tools.clear()  # Clear the screen
     panda_db()
     main_menu()
