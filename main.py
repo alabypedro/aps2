@@ -69,7 +69,7 @@ class ShowDB:
 
     # Sort Options
     def handle_sort_options(self, current_option):
-        """Handle the sort options avaible inside for each of options on "Visualizar Base de Dados" section
+        """Handle the sort options avaiable at "Visualizar Base de Dados" section
 
         Args:
             current_option (int): The section between "Todas cidades/ metrópoles / área"
