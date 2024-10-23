@@ -262,9 +262,10 @@ def add_cidade_menu():
 
         if user_input == "1":
             cidade_cache = input("Digite o nome da cidade: ")
-            if  cidade_cache.isdigit():
+            if cidade_cache.isdigit():
                 tools.input_error(cidade_cache)
-
+            else:
+                cidade = cidade_cache
 
         elif user_input == "2":
             area_cache = input("Digite a área da cidade: ")
@@ -275,13 +276,15 @@ def add_cidade_menu():
 
         elif user_input == "3":
             populacao_cache = input("Digite a população da cidade: ")
-            if populacao_cache.isdigit():
-                tools.input_error(populacao_cache) 
+            if not populacao_cache.isdigit():
+                tools.input_error(populacao_cache)
+            else:
+                populacao = populacao_cache
 
         elif user_input == "4":
-            
+
             # Prevents the user from input empty field
-            if cidade == "": 
+            if cidade == "":
                 tools.empty_error("cidade")  # printa mensagem de erro
                 ERROR_FLAG = 1
             if area == "":
