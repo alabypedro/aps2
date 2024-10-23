@@ -2,23 +2,23 @@ from curses.ascii import isdigit
 import pandas as pd  # Data base
 import localPackage as tools  # tools.py
 import os      # Operations system package
-# import json    # Arquivos .json
+import json    # Arquivos .json
 
 ASCII_ART = """
-                                                                                                    
-                                                                                                    
-                                                                                                    
-                       .                                                                            
-                       ~                                                                            
-                       ~                                                      .                     
-                       7                                                      ^                     
-                      .G^                                                     !^                    
-                      ^??                                                    .J!                    
-                     .5Y5^                                                   ?5Y.                   
-                     !~:^7                                                  .P7J!                   
-                    .Y~^??:                                                 :P!~5                   
-                    ^J^~?!!                                                .~57!5.                  
-                    75:J!7J                       ..~....     :^~!:   .:.. .Y?7JY^   YY777?J.       
+
+
+
+                       .
+                       ~
+                       ~                                                      .
+                       7                                                      ^
+                      .G^                                                     !^
+                      ^??                                                    .J!
+                     .5Y5^                                                   ?5Y.
+                     !~:^7                                                  .P7J!
+                    .Y~^??:                                                 :P!~5
+                    ^J^~?!!                                                .~57!5.
+                    75:J!7J                       ..~....     :^~!:   .:.. .Y?7JY^   YY777?J.
                     ?5~7!7?                       7!~!^7G    ~JYYYJ75.~PBY^^5575Y7:  5J!~!?P.      .
                     ?Y~7!!Y                      ^~^^~^~7^   !~~7JJJ5J~YY!~7P5!?J~^  5^::^^Y.     .G
                     J?~^!!J                     ?7::^~^~^5!::!!~^^^:7!:Y?~JJ5P~?J!!  P::::^Y.     .J
@@ -50,7 +50,7 @@ class Color:
 
 
 class ShowDB:
-    """Class used to handle the "Visualizar Base de Dados" Main Menu's option 
+    """Class used to handle the "Visualizar Base de Dados" Main Menu's option
     """
 
     def __init__(self, data):
@@ -129,11 +129,16 @@ class ShowDB:
         else:
             tools.input_error(user_input)
 
+    def find_city(self, search_string):
+        result = self.expand_db[self.expand_db['Cidade'].str.contains(
+            search_string, case=False, na=False)]
+
+        return result
+
     def find_city_menu(self):
         tools.clear()
         search_string = input("Digite o nome da cidade que deseja buscar: ")
-        result = self.expand_db[self.expand_db['Cidade'].str.contains(
-            search_string, case=False, na=False)]
+        result = self.find_city(search_string)
 
         # Checking if result is empty
         if result.empty:
@@ -151,10 +156,10 @@ class ShowDB:
             print("\n", Color.BOLD, 45 * "=", Color.END, sep="")
 
 
-# Functions --------------------------------------------------------
+# Functions -----------------------------------------------------------
+# ------------------------------------- DataBase manipulation Functions
 
-
-def panda_db():
+def read_json_to_panda():
     """Read city_db.json file and fills the Panda's data base
 
     Returns:
@@ -165,15 +170,78 @@ def panda_db():
     FILE_PATH = os.path.join("db", "city_db.json")
 
     DataBase = pd.read_json(FILE_PATH)  # Fills Panda's data base from json
-
     return DataBase
+
+
+def update_json_from_panda(data):
+    FILE_PATH = os.path.join("db", "city_db.json")
+
+    # update Panda Data_base
+    DataBase = pd.DataFrame(data)
+    # Update .json file
+    DataBase.to_json(FILE_PATH, orient='records', indent=4)
+
+
+def Clean_DB():
+
+    print(Color.BOLD, Color.RED,
+          100 * "=",
+          Color.END, sep="")
+
+    user_input = input(f"{Color.BOLD}{Color.RED}[!] Atenção, você está prestes a apagar TODOS os dados da base de dados, deseja continuar? [y/n] [!]{Color.END}\n"
+                       )
+    if user_input.lower() == 'y':
+        DataBase = read_json_to_panda()
+        # Reinitialize the Data Base with these columns
+        DataBase = pd.DataFrame(columns=["Cidade", "Área", "População"])
+        update_json_from_panda(DataBase)
+        read_json_to_panda()
+        print("Base de dados apagada.")
+        tools.confirm()
+    else:
+        return
+
+
+def add_city(name, area, pop):
+    FILE_PATH = os.path.join("db", "city_db.json")
+
+    new_city = {
+        "Cidade": name,
+        "Área": int(area),
+        "População": int(pop)
+    }
+
+    with open(FILE_PATH, 'r', encoding='utf-8') as file:
+        try:
+            # Load the JSON data into a Python dictionary
+            data = json.load(file)
+        except json.JSONDecodeError:
+            # If the file is empty or not a valid JSON, initialize with an empty "Cidades" list
+            data = {"Cidades": []}
+
+        # Appending new_city into "Cidades" array
+        data["Cidades"].append(new_city)
+
+        # Updating the .json file.
+        with open(FILE_PATH, 'w', encoding='utf-8') as file:
+            json.dump(data, file, ensure_ascii=False, indent=4)
+
+        read_json_to_panda()  # Update the Panda's Data base
+
+        print(Color.GREEN, Color.BOLD,
+              "[>>] Cidade adicionada com sucesso!",
+              Color.END, sep="")
+        tools.confirm()
+
+
+# ------------------------------------------------------ Menu Functions
 
 
 def display_data_menu():
     """ Open a menu for visualize_db options, uses ShowDB class
     """
     tools.clear()
-    DataBase = ShowDB(panda_db())
+    DataBase = ShowDB(read_json_to_panda())
 
     tools.session_header("Base de Dados")
 
@@ -237,9 +305,9 @@ def display_data_menu():
 
 
 def add_cidade_menu():
-    """" Open a menu for add cities 
+    """" Open a menu for add cities
     """
-    DataBase = ShowDB(panda_db())
+    DataBase = ShowDB(read_json_to_panda())
 
     cidade = ""
     area = ""
@@ -255,32 +323,42 @@ def add_cidade_menu():
 [2] Área: {area}
 [3] População: {populacao}
 [4] Confirma
-[0] Volta
+[0] Voltar
     """)
         user_input = input("Selecione uma opção: ")
 
-        if user_input == "1":
+        if user_input == "1":  # Cidade
             cidade_cache = input("Digite o nome da cidade: ")
-            if cidade_cache.isdigit():
-                tools.input_error(cidade_cache)
-            else:
-                cidade = cidade_cache
 
-        elif user_input == "2":
+            # Check if a city already exists on data base
+            if not DataBase.find_city(cidade_cache).empty:
+                print(Color.RED, Color.BOLD,
+                      f"Cidade '{
+                          cidade_cache}' ja existe no nosso banco de dados.",
+                      Color.END, sep=""
+                      )
+                tools.confirm()
+            else:
+                if cidade_cache.isdigit():
+                    tools.input_error(cidade_cache)
+                else:
+                    cidade = cidade_cache
+
+        elif user_input == "2":  # Área
             area_cache = input("Digite a área da cidade: ")
             if not area_cache.isdigit():
                 tools.input_error(area_cache)
             else:
                 area = area_cache
 
-        elif user_input == "3":
+        elif user_input == "3":  # População
             populacao_cache = input("Digite a população da cidade: ")
             if not populacao_cache.isdigit():
                 tools.input_error(populacao_cache)
             else:
                 populacao = populacao_cache
 
-        elif user_input == "4":
+        elif user_input == "4":  # Confirma
 
             # Prevents the user from input empty field
             if cidade == "":
@@ -294,17 +372,17 @@ def add_cidade_menu():
                 ERROR_FLAG = 1
 
             if ERROR_FLAG == 0:
-                update_db()  # add city
+                add_city(cidade, area, populacao)  # add city
             else:
-                input("Pressioner Enter para continuar")
+                tools.confirm()
 
-        elif user_input == "0":
+        elif user_input == "0":  # Voltar
             main_menu()
         else:
             tools.input_error(user_input)
 
 
-def update_db():
+def calculos():
     ...
 
 
@@ -319,6 +397,7 @@ def main_menu():
 [1] Acessar base de dados
 [2] Inserir uma nova cidade
 [3] Cálculos estatísticos
+[4] Limpar a base de dados
 [s] Sair
 """
 
@@ -331,6 +410,8 @@ def main_menu():
         add_cidade_menu()
     elif user_menu_input == '3':
         ...
+    elif user_menu_input == '4':
+        Clean_DB()
     elif user_menu_input.lower() == "s":
         print(f"Até mais!")
         exit(0)
@@ -341,5 +422,5 @@ def main_menu():
 # Main -------------------------------------------------------------
 
 while True:
-    panda_db()
+    DataBase = read_json_to_panda()
     main_menu()
