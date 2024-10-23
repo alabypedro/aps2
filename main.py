@@ -1,3 +1,4 @@
+from curses.ascii import isdigit
 import pandas as pd  # Data base
 import localPackage as tools  # tools.py
 import os      # Operations system package
@@ -236,6 +237,8 @@ def display_data_menu():
 
 
 def add_cidade_menu():
+    """" Open a menu for add cities 
+    """
     DataBase = ShowDB(panda_db())
 
     cidade = ""
@@ -257,7 +260,10 @@ def add_cidade_menu():
         user_input = input("Selecione uma opção: ")
 
         if user_input == "1":
-            cidade = input("Digite o nome da cidade: ")
+            cidade_cache = input("Digite o nome da cidade: ")
+            if  cidade_cache.isdigit():
+                tools.input_error(cidade_cache)
+
 
         elif user_input == "2":
             area_cache = input("Digite a área da cidade: ")
@@ -267,21 +273,25 @@ def add_cidade_menu():
                 area = area_cache
 
         elif user_input == "3":
-            populacao = input("Digite a população da cidade: ")
+            populacao_cache = input("Digite a população da cidade: ")
+            if populacao_cache.isdigit():
+                tools.input_error(populacao_cache) 
 
         elif user_input == "4":
-            if cidade == "":
-                print("Campo cidade está vazio.")
+            
+            # Prevents the user from input empty field
+            if cidade == "": 
+                tools.empty_error("cidade")  # printa mensagem de erro
                 ERROR_FLAG = 1
             if area == "":
-                print("Campo área está vazio.")
+                tools.empty_error("área")
                 ERROR_FLAG = 1
             if populacao == "":
-                print("Campo população está vazio. ")
+                tools.empty_error("população")
                 ERROR_FLAG = 1
 
             if ERROR_FLAG == 0:
-                update_db()
+                update_db()  # add city
             else:
                 input("Pressioner Enter para continuar")
 
@@ -297,9 +307,9 @@ def update_db():
 
 def main_menu():
     tools.clear()  # Clear the screen
-    # A header to identify the current section
     print(ASCII_ART)
 
+    # A header to identify the current section
     tools.session_header("Menu Principal")
 
     options_display = """

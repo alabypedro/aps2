@@ -59,3 +59,8 @@ def input_error(user_input):
 def session_header(title):
     session_title = TxtLayout(title)
     session_title.header()
+    
+def empty_error(text):
+     print(Color.RED,Color.BOLD,
+                    f"Campo {text} está vazio. ",
+                    Color.END,sep="")
