@@ -234,6 +234,8 @@ def display_data_menu():
     else:
         tools.input_error(user_input)
 
+def add_cidade_menu():
+    
 
 def main_menu():
     tools.clear()  # Clear the screen
