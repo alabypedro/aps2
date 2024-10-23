@@ -3,6 +3,33 @@ import localPackage as tools  # tools.py
 import os      # Operations system package
 # import json    # Arquivos .json
 
+ASCII_ART = """
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                       .                                                                            
+                       ~                                                                            
+                       ~                                                      .                     
+                       7                                                      ^                     
+                      .G^                                                     !^                    
+                      ^??                                                    .J!                    
+                     .5Y5^                                                   ?5Y.                   
+                     !~:^7                                                  .P7J!                   
+                    .Y~^??:                                                 :P!~5                   
+                    ^J^~?!!                                                .~57!5.                  
+                    75:J!7J                       ..~....     :^~!:   .:.. .Y?7JY^   YY777?J.       
+                    ?5~7!7?                       7!~!^7G    ~JYYYJ75.~PBY^^5575Y7:  5J!~!?P.      .
+                    ?Y~7!!Y                      ^~^^~^~7^   !~~7JJJ5J~YY!~7P5!?J~^  5^::^^Y.     .G
+                    J?~^!!J                     ?7::^~^~^5!::!!~^^^:7!:Y?~JJ5P~?J!!  P::::^Y.     .J
+            ?~^7~~! J!~:~^7    57^J             J!!::!.:^J????~^::. !!~GJ!J?J5J77!J~ P~~^^^J^...  .?
+            5!!~^:? ??7:!^~    G7^J           !~?!!..~..:?^~!?^^::. !7J57!????J::.7~ P^::^^J7~!5. :?
+     ::.    B!7~!^J ?J!:!^:    P~.?~!:~...    J?P!7.:?.:.7^~~7!!~^: 7!Y5Y?JJ?7J^:.!5~G!^:^^J7::577P?
+  ...!^!.^:^G^!^~^5 ?~^.~7J77~^5~:J^...::57^  J!P?7^:J:::!~77?~!~:: !?55GJ?YJ!J^..75JP~::::?7^:J7J5Y
+  7~~?^:!?~~^!7^!~P!Y~~^P!~!7!^P7^Y:.:.:.YYY!.!777~J!J::JY7YY^^~~^: ~Y7Y5J?Y?!J^:.7J~Y^::..?7^~!!?!!
+  !^:!^.:!~~^!?!!7577~Y!P:..^~^G?^Y:...:.7YJY5!~^^:!??^^J?~!Y?7:^Y^:~7^!???Y7!?::^7Y!5~^^^^J7??^!7!!
+7Y5~~^. .~^^^?!7!7P!7:7~7~..!^^P?^Y:...:.7JJJ?77~~^~P!:^!J^^7J~..5Y!77^~7!!Y!!?.:~JY~57~~~~J?!!.!!~!
+"""
+
 # Class ----------------------------------------------------------
 
 
@@ -42,7 +69,7 @@ class ShowDB:
 
     # Sort Options
     def handle_sort_options(self, current_option):
-        """Handle the sort options avaible inside the each of options on "Visualizar Base de Dados" section
+        """Handle the sort options avaible inside for each of options on "Visualizar Base de Dados" section
 
         Args:
             current_option (int): The section between "Todas cidades/ metrópoles / área"
@@ -50,9 +77,10 @@ class ShowDB:
         Returns:
             function: If user_option == 0 returns visualize_db()
         """
+
         print("\nOrganizar por: ")
         print("[1] A-Z [2] Área (km²) [3] População [4] Índice [0] 0 para voltar")
-        user_input = input("Digite uma opção: ")
+        user_input = input("Digite a opção desejada: ")
 
         # Handle the "Visualizar todas cidades" options
         if current_option == 1:
@@ -96,12 +124,34 @@ class ShowDB:
             tools.clear()
             print(self.sortIndex)
         elif user_input == '0':
-            return visualize_db()
+            return display_data_menu()
         else:
             tools.input_error(user_input)
 
+    def find_city_menu(self):
+        tools.clear()
+        search_string = input("Digite o nome da cidade que deseja buscar: ")
+        result = self.expand_db[self.expand_db['Cidade'].str.contains(
+            search_string, case=False, na=False)]
+
+        # Checking if result is empty
+        if result.empty:
+            print(Color.BOLD, Color.RED,
+                  f"Não foi possível encontrar '{
+                      search_string}' na base de dados",
+                  Color.END, sep="")
+        else:
+            print()  # New line
+            tools.session_header(
+                "Resultado ==============================")
+            print("\n", result, sep="")
+
+            # Len of string
+            print("\n", Color.BOLD, 45 * "=", Color.END, sep="")
+
 
 # Functions --------------------------------------------------------
+
 
 def panda_db():
     """Read city_db.json file and fills the Panda's data base
@@ -118,7 +168,7 @@ def panda_db():
     return DataBase
 
 
-def visualize_db():
+def display_data_menu():
     """ Open a menu for visualize_db options, uses ShowDB class
     """
     tools.clear()
@@ -130,6 +180,7 @@ def visualize_db():
 [1] Visualizar todos as cidades
 [2] Visualizar apenas metrópoles
 [3] Visualizar apenas cidades com área > 1000 km²
+[4] Buscar cidade pelo nome
 [0] Voltar
 [s] Sair
 """
@@ -158,12 +209,26 @@ def visualize_db():
         while True:
             DataBase.handle_sort_options(3)
 
+    elif user_input == '4':
+        tools.clear()
+        tools.session_header("Buscador")
+        DataBase.find_city_menu()
+        while True:
+            print("\n[1] Fazer nova busca [0] voltar")
+            user_input = input("Digite a opção desejada: ")
+            if user_input == '1':
+                DataBase.find_city_menu()
+            elif user_input == '0':
+                display_data_menu()
+            else:
+                tools.input_error(user_input)
+
     elif user_input == '0':  # Voltar
         main_menu()
 
     elif user_input.lower() == 's':  # Sair
-        exit(0)
         print("Até mais!")
+        exit(0)
 
     else:
         tools.input_error(user_input)
@@ -172,13 +237,15 @@ def visualize_db():
 def main_menu():
     tools.clear()  # Clear the screen
     # A header to identify the current section
+    print(ASCII_ART)
+
     tools.session_header("Menu Principal")
 
     options_display = """
 [1] Visualizar base de dados
-[2] Procurar por cidade específica
-[3] Inserir uma nova cidade
-[4] Alterar dados
+[2] Inserir uma nova cidade
+[3] Alterar dados
+[4] Cálculos estatísticos
 [s] Sair
 """
 
@@ -186,7 +253,7 @@ def main_menu():
     user_menu_input = input("Escolha uma opção: ")
 
     if user_menu_input == '1':
-        visualize_db()
+        display_data_menu()
     elif user_menu_input == '2':
         ...
     elif user_menu_input == '3':
@@ -199,11 +266,9 @@ def main_menu():
     else:
         tools.input_error(user_menu_input)
 
+
 # Main -------------------------------------------------------------
 
-
-LOOP_FLAG = True
-
-while LOOP_FLAG:
+while True:
     panda_db()
     main_menu()
