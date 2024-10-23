@@ -181,6 +181,7 @@ def display_data_menu():
 [2] Visualizar apenas metrópoles
 [3] Visualizar apenas cidades com área > 1000 km²
 [4] Buscar cidade pelo nome
+[5] Alterar dados de uma cidade
 [0] Voltar
 [s] Sair
 """
@@ -242,10 +243,9 @@ def main_menu():
     tools.session_header("Menu Principal")
 
     options_display = """
-[1] Visualizar base de dados
+[1] Acessar base de dados
 [2] Inserir uma nova cidade
-[3] Alterar dados
-[4] Cálculos estatísticos
+[3] Cálculos estatísticos
 [s] Sair
 """
 
@@ -257,8 +257,6 @@ def main_menu():
     elif user_menu_input == '2':
         ...
     elif user_menu_input == '3':
-        ...
-    elif user_menu_input == '4':
         ...
     elif user_menu_input.lower() == "s":
         print(f"Até mais!")
