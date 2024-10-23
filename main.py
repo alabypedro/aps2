@@ -1,4 +1,5 @@
 from curses.ascii import isdigit
+from _curses import *
 import pandas as pd  # Data base
 import localPackage as tools  # tools.py
 import os      # Operations system package
