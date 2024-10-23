@@ -234,50 +234,67 @@ def display_data_menu():
     else:
         tools.input_error(user_input)
 
+
 def add_cidade_menu():
+    DataBase = ShowDB(panda_db())
+
     cidade = ""
     area = ""
     populacao = ""
 
     while True:
+        ERROR_FLAG = 0
         tools.clear()
-        tools.session_header("add_cidade_menu")
-        
+        tools.session_header("Adicionar cidade")
+
         print(f"""
-    [1] Cidade: {cidade}
-    [2] Área: {area}
-    [3] População: {populacao}
-    [4] Confirma
-    [0] Volta         
+[1] Cidade: {cidade}
+[2] Área: {area}
+[3] População: {populacao}
+[4] Confirma
+[0] Volta
     """)
-        user_input=input("Selecione uma opção: ")
-        
-        if user_input== "1":
+        user_input = input("Selecione uma opção: ")
+
+        if user_input == "1":
             cidade = input("Digite o nome da cidade: ")
-            
-        elif user_input== "2":
-            area = input("Digite a área da cidade: ")
-        
-        elif user_input== "3":
+
+        elif user_input == "2":
+            area_cache = input("Digite a área da cidade: ")
+            if not area_cache.isdigit():
+                tools.input_error(area_cache)
+            else:
+                area = area_cache
+
+        elif user_input == "3":
             populacao = input("Digite a população da cidade: ")
-        
-        elif user_input== "4":
-            if cidade.empty:
+
+        elif user_input == "4":
+            if cidade == "":
                 print("Campo cidade está vazio.")
-            if area.empty:
+                ERROR_FLAG = 1
+            if area == "":
                 print("Campo área está vazio.")
-            if  populacao.empty:
+                ERROR_FLAG = 1
+            if populacao == "":
                 print("Campo população está vazio. ")
-                
-                
-        elif user_input== "0":
+                ERROR_FLAG = 1
+
+            if ERROR_FLAG == 0:
+                update_db()
+            else:
+                input("Pressioner Enter para continuar")
+
+        elif user_input == "0":
             main_menu()
         else:
             tools.input_error(user_input)
-            
+
+
 def update_db():
     ...
-            
+
+
 def main_menu():
     tools.clear()  # Clear the screen
     # A header to identify the current section
@@ -298,7 +315,7 @@ def main_menu():
     if user_menu_input == '1':
         display_data_menu()
     elif user_menu_input == '2':
-        ...
+        add_cidade_menu()
     elif user_menu_input == '3':
         ...
     elif user_menu_input.lower() == "s":
