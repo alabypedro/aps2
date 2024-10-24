@@ -234,6 +234,13 @@ def add_city(name, area, pop):
         tools.confirm()
 
 
+def is_json_object_empty():
+    """Verifies if a json file is empty
+    """
+    # Path to the .json files that will be verified
+    FILE_PATH = os.path.join("db", "city_db.json")
+
+
 # ------------------------------------------------------ Menu Functions
 
 
