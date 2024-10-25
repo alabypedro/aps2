@@ -68,6 +68,66 @@ class ShowDB:
     def print_largeCities(self):
         print(self.largeCities)
 
+    def print_average_statistics(self, current_option):
+        """Calculate and print average statistics of cities based on "current_option"
+            current_option == 1: All the database
+            current_option == 2: Only metropolis
+            current_option == 3: Only large cities
+
+        Args:
+            current_option (int): respective number of the current "display_data_menu" option
+        """
+
+        if current_option == 1:  # All the cities
+            # Used on output to identify the city type for the current option
+            city_string = "cidades"
+
+            average_pop = self.expand_db["População"].mean()
+            average_area = self.expand_db["Área"].mean()
+            average_demographic_density = average_pop / average_area
+
+            av_pop_text = f"{Color.BOLD}{average_pop:,.2f}{Color.END}"
+            av_area_text = f"{Color.BOLD}{average_area:,.2f}{Color.END}"
+            av_dem_text = f"{Color.BOLD}{
+                average_demographic_density:,.2f}{Color.END}"
+
+        elif current_option == 2:  # Metropolis
+            city_string = "metrópoles"
+
+            average_pop = self.metropolis["População"].mean()
+            average_area = self.metropolis["Área"].mean()
+            average_demographic_density = average_pop / average_area
+
+            av_pop_text = f"{Color.BOLD}{average_pop:,.2f}{Color.END}"
+            av_area_text = f"{Color.BOLD}{average_area:,.2f}{Color.END}"
+            av_dem_text = f"{Color.BOLD}{
+                average_demographic_density:,.2f}{Color.END}"
+
+        elif current_option == 3:  # Large cities
+            city_string = "grandes cidades"
+
+            average_pop = self.largeCities["População"].mean()
+            average_area = self.largeCities["Área"].mean()
+            average_demographic_density = average_pop / average_area
+
+            av_pop_text = f"{Color.BOLD}{average_pop:,.2f}{Color.END}"
+            av_area_text = f"{Color.BOLD}{average_area:,.2f}{Color.END}"
+            av_dem_text = f"{Color.BOLD}{
+                average_demographic_density:,.2f}{Color.END}"
+
+        print()  # Break line
+        tools.print_item(
+            f"A média da população entre as {
+                city_string} é de {av_pop_text} pessoas"
+        )
+        tools.print_item(
+            f"A média da área entre as {city_string} é {av_area_text} Km²"
+        )
+        tools.print_item(
+            f"A média da densidade demográfica entre as {city_string} é {
+                av_dem_text} Pessoas/Km²"
+        )
+
     # Sort Options
     def handle_sort_options(self, current_option):
         """Handle the sort options avaiable at "Visualizar Base de Dados" section
@@ -174,6 +234,11 @@ def read_json_to_panda():
 
 
 def update_json_from_panda(data):
+    """Update .json file from Panda's data abse
+
+    Args:
+        data (data): Panda's Data Frame
+    """
     FILE_PATH = os.path.join("db", "city_db.json")
 
     # update Panda Data_base
@@ -183,6 +248,8 @@ def update_json_from_panda(data):
 
 
 def Clean_DB():
+    """Clear the .json file and Panda's data base
+    """
 
     print(Color.BOLD, Color.RED,
           100 * "=",
@@ -203,6 +270,13 @@ def Clean_DB():
 
 
 def add_city(name, area, pop):
+    """Add a city on the .json file
+
+    Args:
+        name (str): name of the city
+        area (str): their area
+        pop (str): their population
+    """
     FILE_PATH = os.path.join("db", "city_db.json")
 
     new_city = {
@@ -270,6 +344,7 @@ def display_data_menu():
         tools.session_header("Todas cidades")
         DataBase.print_cities()
         while True:
+            DataBase.print_average_statistics(1)
             DataBase.handle_sort_options(1)
 
     elif user_input == '2':  # Visualizar apenas metrópoles
@@ -277,6 +352,7 @@ def display_data_menu():
         tools.session_header("Metrópoles")
         DataBase.print_metropolis()
         while True:
+            DataBase.print_average_statistics(2)
             DataBase.handle_sort_options(2)
 
     elif user_input == '3':  # Visualizar apenas cidades com área > 1000 km²
@@ -284,9 +360,10 @@ def display_data_menu():
         tools.session_header("Grandes cidades")
         DataBase.print_largeCities()
         while True:
+            DataBase.print_average_statistics(3)
             DataBase.handle_sort_options(3)
 
-    elif user_input == '4':
+    elif user_input == '4':  # Buscar cidade pelo nome
         tools.clear()
         tools.session_header("Buscador")
         DataBase.find_city_menu()
@@ -403,8 +480,7 @@ def main_menu():
     options_display = """
 [1] Acessar base de dados
 [2] Inserir uma nova cidade
-[3] Cálculos estatísticos
-[4] Limpar a base de dados
+[3] Limpar a base de dados
 [s] Sair
 """
 
@@ -416,8 +492,6 @@ def main_menu():
     elif user_menu_input == '2':
         add_cidade_menu()
     elif user_menu_input == '3':
-        ...
-    elif user_menu_input == '4':
         Clean_DB()
     elif user_menu_input.lower() == "s":
         print(f"Até mais!")

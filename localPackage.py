@@ -70,3 +70,10 @@ def empty_error(text):
 def confirm():
     """Ask to the usar to press enter to continue"""
     input("Pressione Enter para continuar.")
+
+
+def print_item(text):
+    print(Color.GREEN, Color.BOLD,
+          "[+] ",
+          Color.END, text, sep=""
+          )
