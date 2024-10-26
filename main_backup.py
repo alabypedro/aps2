@@ -48,7 +48,7 @@ class Color:
     END = '\033[0m'
 
 
-class DbHandler:
+class ShowDB:
     """Class used to handle the "Visualizar Base de Dados" Main Menu's option
     """
 
@@ -128,8 +128,7 @@ class DbHandler:
         )
 
     # Sort Options
-    # user_input takes default arg
-    def handle_sort_options(self, current_option, user_input='4'):
+    def handle_sort_options(self, current_option):
         """Handle the sort options avaiable at "Visualizar Base de Dados" section
 
         Args:
@@ -138,6 +137,10 @@ class DbHandler:
         Returns:
             function: If user_option == 0 returns visualize_db()
         """
+
+        print("\nOrganizar por: ")
+        print("[1] A-Z [2] Área (km²) [3] População [4] Índice [0] 0 para voltar")
+        user_input = input("Digite a opção desejada: ")
 
         # Handle the "Visualizar todas cidades" options
         if current_option == 1:
@@ -168,31 +171,22 @@ class DbHandler:
                 by="População", ascending=False)
             self.sortIndex = self.largeCities.sort_index(ascending=True)
 
-        print("\nOrganizar por: ")
-        print("[1] A-Z [2] Área (km²) [3] População [4] Índice [0] 0 para voltar")
-        user_cache = input("Digite a opção desejada: ")
-
-        # We need to check for a valid input
-        if user_cache.isdigit() and int(user_cache) in range(0, 5):  # range 0,5 because range(i,j) = (i, j-1)
-            user_input = user_cache  # if user_cache is valid user_input = user_cache
-
-            if user_input == '1':
-                tools.clear()
-                print(self.sortName)
-            elif user_input == '2':
-                tools.clear()
-                print(self.sortArea)
-            elif user_input == '3':
-                tools.clear()
-                print(self.sortPop)
-            elif user_input == '4':
-                tools.clear()
-                print(self.sortIndex)
-            elif user_input == '0':
-                return display_data_menu()
-        else:  # else, recursive call with last valid option
+        if user_input == '1':
+            tools.clear()
+            print(self.sortName)
+        elif user_input == '2':
+            tools.clear()
+            print(self.sortArea)
+        elif user_input == '3':
+            tools.clear()
+            print(self.sortPop)
+        elif user_input == '4':
+            tools.clear()
+            print(self.sortIndex)
+        elif user_input == '0':
+            return display_data_menu()
+        else:
             tools.input_error(user_input)
-            display_data_menu(previous_input=current_option)
 
     def find_city(self, search_string):
         result = self.expand_db[self.expand_db['Cidade'].str.contains(
@@ -327,22 +321,15 @@ def default_json_layout():
 # ------------------------------------------------------ Menu Functions
 
 
-def display_data_menu(previous_input=False):
+def display_data_menu():
     """ Open a menu for visualize_db options, uses ShowDB class
-
-    Args:
-        previous_input=False (boolean): arg set as False by default, used to recall the function
-                                        in the same option that the user previously are. (used for bug fix)
-                                        at  DbHandler.sortHandler().
     """
     tools.clear()
-    DataBase = DbHandler(read_json_to_panda())
+    DataBase = ShowDB(read_json_to_panda())
 
-    if previous_input == False:
+    tools.session_header("Base de Dados")
 
-        tools.session_header("Base de Dados")
-
-        options_display = """
+    options_display = """
 [1] Visualizar todos as cidades
 [2] Visualizar apenas metrópoles
 [3] Visualizar apenas cidades com área > 1000 km²
@@ -350,12 +337,10 @@ def display_data_menu(previous_input=False):
 [5] Alterar dados de uma cidade
 [0] Voltar
 [s] Sair
-    """
+"""
 
-        print(options_display)
-        user_input = input("Escolha uma opção: ")
-    else:
-        user_input = str(previous_input)
+    print(options_display)
+    user_input = input("Escolha uma opção: ")
 
     if user_input == '1':  # Visualizar todas as cidades
         tools.clear()
@@ -404,13 +389,12 @@ def display_data_menu(previous_input=False):
 
     else:
         tools.input_error(user_input)
-        display_data_menu()  # Recursive call - avoid to return to main_menu()
 
 
 def add_cidade_menu():
     """" Open a menu for add cities
     """
-    DataBase = DbHandler(read_json_to_panda())
+    DataBase = ShowDB(read_json_to_panda())
 
     cidade = ""
     area = ""
