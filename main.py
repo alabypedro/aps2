@@ -1,4 +1,3 @@
-from curses.ascii import isdigit
 import pandas as pd  # Data base
 import localPackage as tools  # tools.py
 import os      # Operations system package
