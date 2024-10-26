@@ -315,6 +315,10 @@ def is_json_object_empty():
     FILE_PATH = os.path.join("db", "city_db.json")
 
 
+def default_json_layout():
+    FILE_PATH = os.path.join("db", "city_db.json")
+
+
 # ------------------------------------------------------ Menu Functions
 
 
@@ -464,10 +468,6 @@ def add_cidade_menu():
             main_menu()
         else:
             tools.input_error(user_input)
-
-
-def calculos():
-    ...
 
 
 def main_menu():
