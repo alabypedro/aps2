@@ -347,7 +347,6 @@ def display_data_menu(previous_input=False):
 [2] Visualizar apenas metrópoles
 [3] Visualizar apenas cidades com área > 1000 km²
 [4] Buscar cidade pelo nome
-[5] Alterar dados de uma cidade
 [0] Voltar
 [s] Sair
     """
@@ -507,7 +506,8 @@ def main_menu():
     elif user_menu_input == '2':
         add_cidade_menu()
     elif user_menu_input == '3':
-        Clean_DB()
+        tools.print_in_development()
+        # Clean_DB()
     elif user_menu_input.lower() == "s":
         print(f"Até mais!")
         exit(0)

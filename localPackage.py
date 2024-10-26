@@ -77,3 +77,10 @@ def print_item(text):
           "[+] ",
           Color.END, text, sep=""
           )
+
+
+def print_in_development():
+    print(Color.BLUE, Color.BOLD,
+          "[!] Opção em desenvolvimento [!]",
+          Color.END, sep=""
+          )
