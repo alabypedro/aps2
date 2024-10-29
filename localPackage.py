@@ -81,6 +81,7 @@ def print_item(text):
 
 def print_in_development():
     print(Color.BLUE, Color.BOLD,
-          "[!] Opção em desenvolvimento [!]",
+          "[!] Sessão em desenvolvimento [!]",
           Color.END, sep=""
           )
+    confirm()

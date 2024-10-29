@@ -217,28 +217,66 @@ class ShowDB:
 
 # Functions -----------------------------------------------------------
 # ------------------------------------- DataBase manipulation Functions
+def is_json_object_empty(func):
+    """[Decorator] Verifies if a json file is empty
+    """
+    def nested():
+        # Path to the .json files that will be verified
+        FILE_PATH = os.path.join("db", "city_db.json")
 
-def read_json_to_panda():
+        # read json file
+        with open(FILE_PATH, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+
+        try:  # try to execute (if it not trigger an error)
+            if isinstance(data, dict):  # Check if data was a dict
+                return 'OK'
+            if data == {}:
+                return 'empty_dict'
+            else:
+                return "non_valid_data"
+        except json.JSONDecodeError:  # Is not formated as .json file or is blank
+            return "empty_file"
+
+    return nested  # Returning nested function
+
+
+def default_json_layout(func):
+    @is_json_object_empty
+    def nested(data_status):
+        FILE_PATH = os.path.join("db", "city_db.json")
+
+        if data_status == 'OK':
+            pass
+        else:
+            default_layout = {"Cidades": []}
+
+            with open(FILE_PATH, 'w', encoding='utf-8') as file:
+                json.dump(default_layout, file, indent=4)
+
+        return FILE_PATH
+    return nested
+
+
+@default_json_layout
+def read_json_to_panda(FILE_PATH):
     """Read city_db.json file and fills the Panda's data base
 
     Returns:
         Data: DataBase
     """
 
-    # Write the file path to the city_db.json on db directory
-    FILE_PATH = os.path.join("db", "city_db.json")
-
     DataBase = pd.read_json(FILE_PATH)  # Fills Panda's data base from json
     return DataBase
 
 
-def update_json_from_panda(data):
+@default_json_layout
+def update_json_from_panda(data, FILE_PATH):
     """Update .json file from Panda's data abse
 
     Args:
         data (data): Panda's Data Frame
     """
-    FILE_PATH = os.path.join("db", "city_db.json")
 
     # update Panda Data_base
     DataBase = pd.DataFrame(data)
@@ -305,17 +343,6 @@ def add_city(name, area, pop):
               "[>>] Cidade adicionada com sucesso!",
               Color.END, sep="")
         tools.confirm()
-
-
-def is_json_object_empty():
-    """Verifies if a json file is empty
-    """
-    # Path to the .json files that will be verified
-    FILE_PATH = os.path.join("db", "city_db.json")
-
-
-def default_json_layout():
-    FILE_PATH = os.path.join("db", "city_db.json")
 
 
 # ------------------------------------------------------ Menu Functions

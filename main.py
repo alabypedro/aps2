@@ -191,7 +191,7 @@ class DbHandler:
             elif user_input == '0':
                 return display_data_menu()
         else:  # else, recursive call with last valid option
-            tools.input_error(user_input)
+            tools.input_error(user_cache)
             display_data_menu(previous_input=current_option)
 
     def find_city(self, search_string):
@@ -239,7 +239,7 @@ def read_json_to_panda():
 
 
 def update_json_from_panda(data):
-    """Update .json file from Panda's data abse
+    """Update json file from Panda's data abse
 
     Args:
         data (data): Panda's Data Frame
@@ -516,7 +516,6 @@ def main_menu():
 
 
 # Main -------------------------------------------------------------
-
 while True:
     DataBase = read_json_to_panda()
     main_menu()
