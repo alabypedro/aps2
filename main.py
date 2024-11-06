@@ -3,10 +3,33 @@ import localPackage as tools  # tools.py
 import os      # Operations system package
 import json    # Arquivos .json
 
+
+class Color:
+    """Just add colors for strings.
+    """
+    PURPLE = '\033[95m'
+    CYAN = '\033[96m'
+    DARKCYAN = '\033[36m'
+    BLUE = '\033[94m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    END = '\033[0m'
+
+
+ASCII_TITLE = f"""{Color.CYAN}
+
+                    ██████╗██╗████████╗██╗███████╗███████╗    ██████╗ ██████╗
+                    ██╔════╝██║╚══██╔══╝██║██╔════╝██╔════╝    ██╔══██╗██╔══██╗
+                    ██║     ██║   ██║   ██║█████╗  ███████╗    ██║  ██║██████╔╝
+                    ██║     ██║   ██║   ██║██╔══╝  ╚════██║    ██║  ██║██╔══██╗
+                    ╚██████╗██║   ██║   ██║███████╗███████║    ██████╔╝██████╔╝
+                     ╚═════╝╚═╝   ╚═╝   ╚═╝╚══════╝╚══════╝    ╚═════╝ ╚═════╝
+{Color.END}"""
+
 ASCII_ART = """
-
-
-
                        .
                        ~
                        ~                                                      .
@@ -31,21 +54,6 @@ ASCII_ART = """
 """
 
 # Class ----------------------------------------------------------
-
-
-class Color:
-    """Just add colors for strings.
-    """
-    PURPLE = '\033[95m'
-    CYAN = '\033[96m'
-    DARKCYAN = '\033[36m'
-    BLUE = '\033[94m'
-    GREEN = '\033[92m'
-    YELLOW = '\033[93m'
-    RED = '\033[91m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-    END = '\033[0m'
 
 
 class DbHandler:
@@ -313,7 +321,7 @@ def add_city(name, area, pop):
         tools.confirm()
 
 
-def is_json_object_empty():
+def is_json_empty():
     """Verifies if a json file is empty
     """
     # Path to the .json files that will be verified
@@ -487,6 +495,7 @@ def add_cidade_menu():
 def main_menu():
     tools.clear()  # Clear the screen
     print(ASCII_ART)
+    # print(ASCII_TITLE)
 
     # A header to identify the current section
     tools.session_header("Menu Principal")
