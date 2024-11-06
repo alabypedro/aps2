@@ -343,7 +343,7 @@ def display_data_menu(previous_input=False):
         tools.session_header("Base de Dados")
 
         options_display = """
-[1] Visualizar todos as cidades
+[1] Visualizar todas as cidades
 [2] Visualizar apenas metrópoles
 [3] Visualizar apenas cidades com área > 1000 km²
 [4] Buscar cidade pelo nome
