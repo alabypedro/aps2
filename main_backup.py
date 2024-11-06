@@ -48,7 +48,7 @@ class Color:
     END = '\033[0m'
 
 
-class ShowDB:
+class DbHandler:
     """Class used to handle the "Visualizar Base de Dados" Main Menu's option
     """
 
@@ -128,7 +128,8 @@ class ShowDB:
         )
 
     # Sort Options
-    def handle_sort_options(self, current_option):
+    # user_input takes default arg
+    def handle_sort_options(self, current_option, user_input='4'):
         """Handle the sort options avaiable at "Visualizar Base de Dados" section
 
         Args:
@@ -137,10 +138,6 @@ class ShowDB:
         Returns:
             function: If user_option == 0 returns visualize_db()
         """
-
-        print("\nOrganizar por: ")
-        print("[1] A-Z [2] Área (km²) [3] População [4] Índice [0] 0 para voltar")
-        user_input = input("Digite a opção desejada: ")
 
         # Handle the "Visualizar todas cidades" options
         if current_option == 1:
@@ -171,22 +168,31 @@ class ShowDB:
                 by="População", ascending=False)
             self.sortIndex = self.largeCities.sort_index(ascending=True)
 
-        if user_input == '1':
-            tools.clear()
-            print(self.sortName)
-        elif user_input == '2':
-            tools.clear()
-            print(self.sortArea)
-        elif user_input == '3':
-            tools.clear()
-            print(self.sortPop)
-        elif user_input == '4':
-            tools.clear()
-            print(self.sortIndex)
-        elif user_input == '0':
-            return display_data_menu()
-        else:
-            tools.input_error(user_input)
+        print("\nOrganizar por: ")
+        print("[1] A-Z [2] Área (km²) [3] População [4] Índice [0] 0 para voltar")
+        user_cache = input("Digite a opção desejada: ")
+
+        # We need to check for a valid input
+        if user_cache.isdigit() and int(user_cache) in range(0, 5):  # range 0,5 because range(i,j) = (i, j-1)
+            user_input = user_cache  # if user_cache is valid user_input = user_cache
+
+            if user_input == '1':
+                tools.clear()
+                print(self.sortName)
+            elif user_input == '2':
+                tools.clear()
+                print(self.sortArea)
+            elif user_input == '3':
+                tools.clear()
+                print(self.sortPop)
+            elif user_input == '4':
+                tools.clear()
+                print(self.sortIndex)
+            elif user_input == '0':
+                return display_data_menu()
+        else:  # else, recursive call with last valid option
+            tools.input_error(user_cache)
+            display_data_menu(previous_input=current_option)
 
     def find_city(self, search_string):
         result = self.expand_db[self.expand_db['Cidade'].str.contains(
@@ -217,66 +223,28 @@ class ShowDB:
 
 # Functions -----------------------------------------------------------
 # ------------------------------------- DataBase manipulation Functions
-def is_json_object_empty(func):
-    """[Decorator] Verifies if a json file is empty
-    """
-    def nested():
-        # Path to the .json files that will be verified
-        FILE_PATH = os.path.join("db", "city_db.json")
 
-        # read json file
-        with open(FILE_PATH, 'r', encoding='utf-8') as file:
-            data = json.load(file)
-
-        try:  # try to execute (if it not trigger an error)
-            if isinstance(data, dict):  # Check if data was a dict
-                return 'OK'
-            if data == {}:
-                return 'empty_dict'
-            else:
-                return "non_valid_data"
-        except json.JSONDecodeError:  # Is not formated as .json file or is blank
-            return "empty_file"
-
-    return nested  # Returning nested function
-
-
-def default_json_layout(func):
-    @is_json_object_empty
-    def nested(data_status):
-        FILE_PATH = os.path.join("db", "city_db.json")
-
-        if data_status == 'OK':
-            pass
-        else:
-            default_layout = {"Cidades": []}
-
-            with open(FILE_PATH, 'w', encoding='utf-8') as file:
-                json.dump(default_layout, file, indent=4)
-
-        return FILE_PATH
-    return nested
-
-
-@default_json_layout
-def read_json_to_panda(FILE_PATH):
+def read_json_to_panda():
     """Read city_db.json file and fills the Panda's data base
 
     Returns:
         Data: DataBase
     """
 
+    # Write the file path to the city_db.json on db directory
+    FILE_PATH = os.path.join("db", "city_db.json")
+
     DataBase = pd.read_json(FILE_PATH)  # Fills Panda's data base from json
     return DataBase
 
 
-@default_json_layout
-def update_json_from_panda(data, FILE_PATH):
-    """Update .json file from Panda's data abse
+def update_json_from_panda(data):
+    """Update json file from Panda's data abse
 
     Args:
         data (data): Panda's Data Frame
     """
+    FILE_PATH = os.path.join("db", "city_db.json")
 
     # update Panda Data_base
     DataBase = pd.DataFrame(data)
@@ -345,29 +313,48 @@ def add_city(name, area, pop):
         tools.confirm()
 
 
+def is_json_object_empty():
+    """Verifies if a json file is empty
+    """
+    # Path to the .json files that will be verified
+    FILE_PATH = os.path.join("db", "city_db.json")
+
+
+def default_json_layout():
+    FILE_PATH = os.path.join("db", "city_db.json")
+
+
 # ------------------------------------------------------ Menu Functions
 
 
-def display_data_menu():
+def display_data_menu(previous_input=False):
     """ Open a menu for visualize_db options, uses ShowDB class
+
+    Args:
+        previous_input=False (boolean): arg set as False by default, used to recall the function
+                                        in the same option that the user previously are. (used for bug fix)
+                                        at  DbHandler.sortHandler().
     """
     tools.clear()
-    DataBase = ShowDB(read_json_to_panda())
+    DataBase = DbHandler(read_json_to_panda())
 
-    tools.session_header("Base de Dados")
+    if previous_input == False:
 
-    options_display = """
-[1] Visualizar todos as cidades
+        tools.session_header("Base de Dados")
+
+        options_display = """
+[1] Visualizar todas as cidades
 [2] Visualizar apenas metrópoles
 [3] Visualizar apenas cidades com área > 1000 km²
 [4] Buscar cidade pelo nome
-[5] Alterar dados de uma cidade
 [0] Voltar
 [s] Sair
-"""
+    """
 
-    print(options_display)
-    user_input = input("Escolha uma opção: ")
+        print(options_display)
+        user_input = input("Escolha uma opção: ")
+    else:
+        user_input = str(previous_input)
 
     if user_input == '1':  # Visualizar todas as cidades
         tools.clear()
@@ -416,12 +403,13 @@ def display_data_menu():
 
     else:
         tools.input_error(user_input)
+        display_data_menu()  # Recursive call - avoid to return to main_menu()
 
 
 def add_cidade_menu():
     """" Open a menu for add cities
     """
-    DataBase = ShowDB(read_json_to_panda())
+    DataBase = DbHandler(read_json_to_panda())
 
     cidade = ""
     area = ""
@@ -518,7 +506,8 @@ def main_menu():
     elif user_menu_input == '2':
         add_cidade_menu()
     elif user_menu_input == '3':
-        Clean_DB()
+        tools.print_in_development()
+        # Clean_DB()
     elif user_menu_input.lower() == "s":
         print(f"Até mais!")
         exit(0)
@@ -527,7 +516,6 @@ def main_menu():
 
 
 # Main -------------------------------------------------------------
-
 while True:
     DataBase = read_json_to_panda()
     main_menu()
