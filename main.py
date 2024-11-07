@@ -264,7 +264,15 @@ def Clean_DB():
     """Clear the .json file and Panda's data base
     """
     FILE_PATH = os.path.join("db", "city_db.json")
-    default_layout = {"Cidades": []}
+    default_layout = {
+        "Cidades": [
+            {
+                "Cidade": None,
+                "Área": None,
+                "População": None
+            }
+        ]
+    }
 
     print(Color.BOLD, Color.RED,
           100 * "=",
