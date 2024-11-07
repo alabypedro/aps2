@@ -1,9 +1,260 @@
 {
     "Cidades": [
-        {
-            "Cidade":null,
-            "Área": null,
-            "População": null
-        }
+      {
+        "Cidade": "São Paulo",
+        "Área": 1521,
+        "População": 12328000
+      },
+      {
+        "Cidade": "Rio de Janeiro",
+        "Área": 1182,
+        "População": 6775561
+      },
+      {
+        "Cidade": "Brasília",
+        "Área": 5802,
+        "População": 3094325
+      },
+      {
+        "Cidade": "Salvador",
+        "Área": 693,
+        "População": 2886698
+      },
+      {
+        "Cidade": "Fortaleza",
+        "Área": 313,
+        "População": 2686612
+      },
+      {
+        "Cidade": "Belo Horizonte",
+        "Área": 331,
+        "População": 2521564
+      },
+      {
+        "Cidade": "Manaus",
+        "Área": 11401,
+        "População": 2361444
+      },
+      {
+        "Cidade": "Curitiba",
+        "Área": 435,
+        "População": 1963726
+      },
+      {
+        "Cidade": "Recife",
+        "Área": 218,
+        "População": 1653461
+      },
+      {
+        "Cidade": "Porto Alegre",
+        "Área": 496,
+        "População": 1492530
+      },
+      {
+        "Cidade": "Goiânia",
+        "Área": 739,
+        "População": 1551500
+      },
+      {
+        "Cidade": "Belém",
+        "Área": 1071,
+        "População": 1494561
+      },
+      {
+        "Cidade": "Guarulhos",
+        "Área": 318,
+        "População": 1434487
+      },
+      {
+        "Cidade": "Campinas",
+        "Área": 795,
+        "População": 1231067
+      },
+      {
+        "Cidade": "São Luís",
+        "Área": 827,
+        "População": 1125332
+      },
+      {
+        "Cidade": "São Gonçalo",
+        "Área": 248,
+        "População": 1091737
+      },
+      {
+        "Cidade": "Maceió",
+        "Área": 509,
+        "População": 1030727
+      },
+      {
+        "Cidade": "Duque de Caxias",
+        "Área": 465,
+        "População": 924624
+      },
+      {
+        "Cidade": "Natal",
+        "Área": 170,
+        "População": 896708
+      },
+      {
+        "Cidade": "Campo Grande",
+        "Área": 8096,
+        "População": 916001
+      },
+      {
+        "Cidade": "Teresina",
+        "Área": 1392,
+        "População": 870400
+      },
+      {
+        "Cidade": "São Bernardo do Campo",
+        "Área": 409,
+        "População": 849874
+      },
+      {
+        "Cidade": "João Pessoa",
+        "Área": 211,
+        "População": 833930
+      },
+      {
+        "Cidade": "Nova Iguaçu",
+        "Área": 520,
+        "População": 820002
+      },
+      {
+        "Cidade": "São José dos Campos",
+        "Área": 1099,
+        "População": 737310
+      },
+      {
+        "Cidade": "Santo André",
+        "Área": 175,
+        "População": 723889
+      },
+      {
+        "Cidade": "Ribeirão Preto",
+        "Área": 650,
+        "População": 720116
+      },
+      {
+        "Cidade": "Jaboatão dos Guararapes",
+        "Área": 256,
+        "População": 720337
+      },
+      {
+        "Cidade": "Osasco",
+        "Área": 64,
+        "População": 699944
+      },
+      {
+        "Cidade": "Uberlândia",
+        "Área": 4116,
+        "População": 707214
+      },
+      {
+        "Cidade": "Contagem",
+        "Área": 195,
+        "População": 672675
+      },
+      {
+        "Cidade": "Aracaju",
+        "Área": 181,
+        "População": 672614
+      },
+      {
+        "Cidade": "Sorocaba",
+        "Área": 450,
+        "População": 701759
+      },
+      {
+        "Cidade": "Feira de Santana",
+        "Área": 1373,
+        "População": 624107
+      },
+      {
+        "Cidade": "Cuiabá",
+        "Área": 3547,
+        "População": 623614
+      },
+      {
+        "Cidade": "Joinville",
+        "Área": 1130,
+        "População": 597658
+      },
+      {
+        "Cidade": "Aparecida de Goiânia",
+        "Área": 289,
+        "População": 601035
+      },
+      {
+        "Cidade": "Londrina",
+        "Área": 1650,
+        "População": 580870
+      },
+      {
+        "Cidade": "Juiz de Fora",
+        "Área": 1436,
+        "População": 573285
+      },
+      {
+        "Cidade": "Ananindeua",
+        "Área": 190,
+        "População": 530598
+      },
+      {
+        "Cidade": "Niterói",
+        "Área": 133,
+        "População": 515317
+      },
+      {
+        "Cidade": "Belford Roxo",
+        "Área": 80,
+        "População": 513118
+      },
+      {
+        "Cidade": "Campos dos Goytacazes",
+        "Área": 4031,
+        "População": 507548
+      },
+      {
+        "Cidade": "Serra",
+        "Área": 554,
+        "População": 529295
+      },
+      {
+        "Cidade": "Caxias do Sul",
+        "Área": 1643,
+        "População": 517451
+      },
+      {
+        "Cidade": "Macapá",
+        "Área": 641,
+        "População": 522357
+      },
+      {
+        "Cidade": "Mauá",
+        "Área": 61,
+        "População": 477552
+      },
+      {
+        "Cidade": "Florianópolis",
+        "Área": 675,
+        "População": 508826
+      },
+      {
+        "Cidade": "Vila Velha",
+        "Área": 210,
+        "População": 511157
+      },
+      {
+        "Cidade": "Vitória",
+        "Área": 93,
+        "População": 365855
+      },
+      {
+        "Cidade": "Lucélia",
+        "Área": 314,
+        "População": 20248
+      }
     ]
-}
+  }
+  
