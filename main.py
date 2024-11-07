@@ -263,6 +263,8 @@ def update_json_from_panda(data):
 def Clean_DB():
     """Clear the .json file and Panda's data base
     """
+    FILE_PATH = os.path.join("db", "city_db.json")
+    default_layout = {"Cidades": []}
 
     print(Color.BOLD, Color.RED,
           100 * "=",
@@ -278,6 +280,9 @@ def Clean_DB():
         read_json_to_panda()
         print("Base de dados apagada.")
         tools.confirm()
+
+        with open(FILE_PATH, 'w', encoding='utf-8') as file:
+            json.dump(default_layout, file, indent=4)
     else:
         return
 
@@ -515,8 +520,8 @@ def main_menu():
     elif user_menu_input == '2':
         add_cidade_menu()
     elif user_menu_input == '3':
-        tools.print_in_development()
-        # Clean_DB()
+        # tools.print_in_development()
+        Clean_DB()
     elif user_menu_input.lower() == "s":
         print(f"Até mais!")
         exit(0)
