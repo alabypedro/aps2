@@ -24,17 +24,16 @@ O sistema permite realizar diversas operações na base de dados de cidades, tai
 - **requirements.txt**: Arquivo para instalação das dependências.
 
 ## Formato do Arquivo JSON
-
-O arquivo `city_db.json` possui o seguinte formato:
+Exemplo do formato padrão para o arquivo `city_db.json`suportado:
 
 ```json
 {
   "Cidades": [
     {
-      "Cidade": "<Nome da Cidade>",
-      "Área": <Área em km²>,
-      "População": <População>
-    }
+        "Cidade": "São Paulo",
+        "Área": 1521,
+        "População": 11895578
+    },
   ]
 }
 ```
