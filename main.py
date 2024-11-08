@@ -2,6 +2,7 @@ import pandas as pd  # Data base
 import localPackage as tools  # tools.py
 import os      # Operations system package
 import json    # Arquivos .json
+import time
 
 
 class Color:
@@ -19,15 +20,26 @@ class Color:
     END = '\033[0m'
 
 
-ASCII_TITLE = f"""{Color.CYAN}
+def print_cities_DB_title():
+    tools.clear()
+    ASCII_TITLE = f"""{Color.CYAN}
 
-                    ██████╗██╗████████╗██╗███████╗███████╗    ██████╗ ██████╗
-                    ██╔════╝██║╚══██╔══╝██║██╔════╝██╔════╝    ██╔══██╗██╔══██╗
-                    ██║     ██║   ██║   ██║█████╗  ███████╗    ██║  ██║██████╔╝
-                    ██║     ██║   ██║   ██║██╔══╝  ╚════██║    ██║  ██║██╔══██╗
-                    ╚██████╗██║   ██║   ██║███████╗███████║    ██████╔╝██████╔╝
-                     ╚═════╝╚═╝   ╚═╝   ╚═╝╚══════╝╚══════╝    ╚═════╝ ╚═════╝
-{Color.END}"""
+                 ██████╗██╗████████╗██╗███████╗███████╗    ██████╗ ██████╗
+                ██╔════╝██║╚══██╔══╝██║██╔════╝██╔════╝    ██╔══██╗██╔══██╗
+                ██║     ██║   ██║   ██║█████╗  ███████╗    ██║  ██║██████╔╝
+                ██║     ██║   ██║   ██║██╔══╝  ╚════██║    ██║  ██║██╔══██╗
+                ╚██████╗██║   ██║   ██║███████╗███████║    ██████╔╝██████╔╝
+                 ╚═════╝╚═╝   ╚═╝   ╚═╝╚══════╝╚══════╝    ╚═════╝ ╚═════╝{Color.END}{Color.BOLD}
+
+                             Database para estudos demográficos
+                                            by
+                        Gabriel Morais, Graziela Lopes, Pedro Alaby{Color.END}
+"""
+    print("\033[?25l", end='', flush=True)  # Hide the cursor
+    print(ASCII_TITLE)
+    time.sleep(1.75)
+    print("\033[?25h", end='', flush=True)  # Restore the cursor
+
 
 ASCII_ART = """
                        .
@@ -538,6 +550,8 @@ def main_menu():
 
 
 # Main -------------------------------------------------------------
+print_cities_DB_title()
+
 while True:
     DataBase = read_json_to_panda()
     main_menu()
