@@ -24,7 +24,7 @@ O sistema permite realizar diversas operações na base de dados de cidades, tai
 - **requirements.txt**: Arquivo para instalação das dependências.
 
 ## Formato do Arquivo JSON
-Exemplo do formato padrão para o arquivo `city_db.json`suportado:
+Exemplo do formato padrão para o arquivo `city_db.json` suportado:
 
 ```json
 {
