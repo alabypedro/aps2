@@ -292,8 +292,7 @@ def Clean_DB():
           100 * "=",
           Color.END, sep="")
 
-    user_input = input(f"{Color.BOLD}{Color.RED}[!] Atenção, você está prestes a apagar TODOS os dados da base de dados, deseja continuar? [y/n] [!]{Color.END}\n"
-                       )
+    user_input = input(f"{Color.BOLD}{Color.RED}[!] Atenção, você está prestes a apagar TODOS os dados da base de dados, deseja continuar? [y/n] [!]{Color.END}\n")
     if user_input.lower() == 'y':
         DataBase = read_json_to_panda()
         # Reiniciliza o Banco de Dados com estas colunas
@@ -314,7 +313,7 @@ def add_city(name, area, pop):
     Adiciona uma cidade no arquivo .json
 
     Args:
-        nome (str): nome da cidade
+        name (str): nome da cidade
         area (str): sua área
         pop (str): sua população
     """
