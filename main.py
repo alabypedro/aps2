@@ -1,13 +1,13 @@
-import pandas as pd  # Data base
+import pandas as pd  # Banco de dados
 import localPackage as tools  # tools.py
-import os      # Operations system package
+import os      # Pacote de operações do sistema
 import json    # Arquivos .json
 import time
 
 
 class Color:
-    """Just add colors for strings.
-    """
+    # Apenas adiciona cores para strings.
+    
     PURPLE = '\033[95m'
     CYAN = '\033[96m'
     DARKCYAN = '\033[36m'
@@ -35,10 +35,10 @@ def print_cities_DB_title():
                                             by
                         Gabriel Morais, Graziela Lopes, Pedro Alaby{Color.END}
 """
-    print("\033[?25l", end='', flush=True)  # Hide the cursor
+    print("\033[?25l", end='', flush=True)  # Oculta o cursor
     print(ASCII_TITLE)
     time.sleep(1.75)
-    print("\033[?25h", end='', flush=True)  # Restore the cursor
+    print("\033[?25h", end='', flush=True)  # Restaura o cursor
 
 
 ASCII_ART = """
@@ -69,15 +69,14 @@ ASCII_ART = """
 
 
 class DbHandler:
-    """Class used to handle the "Visualizar Base de Dados" Main Menu's option
-    """
-
+    # Classe usada para lidar com a opção "Visualizar Base de Dados" no menu principal
+    
     def __init__(self, data):
         self.expand_db = pd.json_normalize(data['Cidades'])
         self.metropolis = self.expand_db[self.expand_db['População'] > 1000000]
         self.largeCities = self.expand_db[self.expand_db['Área'] > 1000]
 
-    # Print functions
+    # Funções de impressão
     def print_cities(self):
         print(self.expand_db)
 
@@ -88,17 +87,18 @@ class DbHandler:
         print(self.largeCities)
 
     def print_average_statistics(self, current_option):
-        """Calculate and print average statistics of cities based on "current_option"
-            current_option == 1: All the database
-            current_option == 2: Only metropolis
-            current_option == 3: Only large cities
+        """
+        Calcula e imprime estatísticas médias das cidades com base em "opção_atual"
+            opção_atual == 1: Todo o banco de dados
+            opção_atual == 2: Somente metrópoles
+            opção_atual == 3: Somente grandes cidades
 
         Args:
-            current_option (int): respective number of the current "display_data_menu" option
+            Args: número correspondente à opção atual do menu "exibir_dados"
         """
 
-        if current_option == 1:  # All the cities
-            # Used on output to identify the city type for the current option
+        if current_option == 1:  # Todas as cidades
+            # Usado na saída para identificar o tipo de cidade para a opção atual
             city_string = "cidades"
 
             average_pop = self.expand_db["População"].mean()
@@ -110,7 +110,7 @@ class DbHandler:
             av_dem_text = f"{Color.BOLD}{
                 average_demographic_density:,.2f}{Color.END}"
 
-        elif current_option == 2:  # Metropolis
+        elif current_option == 2:  # Metrópoles
             city_string = "metrópoles"
 
             average_pop = self.metropolis["População"].mean()
@@ -122,7 +122,7 @@ class DbHandler:
             av_dem_text = f"{Color.BOLD}{
                 average_demographic_density:,.2f}{Color.END}"
 
-        elif current_option == 3:  # Large cities
+        elif current_option == 3:  # Grandes cidades
             city_string = "grandes cidades"
 
             average_pop = self.largeCities["População"].mean()
@@ -134,7 +134,7 @@ class DbHandler:
             av_dem_text = f"{Color.BOLD}{
                 average_demographic_density:,.2f}{Color.END}"
 
-        print()  # Break line
+        print()  # Quebra de linha
         tools.print_item(
             f"A média da população entre as {
                 city_string} é de {av_pop_text} pessoas"
@@ -147,21 +147,22 @@ class DbHandler:
                 av_dem_text} Pessoas/Km²"
         )
 
-    # Sort Options
-    # user_input takes default arg
+    # Opções de ordenação
+    # user_input usa argumento padrão
     def handle_sort_options(self, current_option, user_input='4'):
-        """Handle the sort options avaiable at "Visualizar Base de Dados" section
+        """
+        Lida com as opções de ordenação disponíveis na seção "Visualizar Base de Dados"
 
         Args:
-            current_option (int): The section between "Todas cidades/ metrópoles / área"
+            a seção entre "Todas as cidades / metrópoles / área"
 
         Returns:
             function: If user_option == 0 returns visualize_db()
         """
 
-        # Handle the "Visualizar todas cidades" options
+        # Manipula as opções de "Visualizar todas as cidades"
         if current_option == 1:
-            # Variables that handle the sorted result
+            # Variáveis que lidam com o resultado ordenado
             self.sortName = self.expand_db.sort_values(
                 by="Cidade", ascending=True)
             self.sortArea = self.expand_db.sort_values(
@@ -192,7 +193,7 @@ class DbHandler:
         print("[1] A-Z [2] Área (km²) [3] População [4] Índice [0] 0 para voltar")
         user_cache = input("Digite a opção desejada: ")
 
-        # We need to check for a valid input
+        # Precisamos verificar uma entrada válida
         if user_cache.isdigit() and int(user_cache) in range(0, 5):  # range 0,5 because range(i,j) = (i, j-1)
             user_input = user_cache  # if user_cache is valid user_input = user_cache
 
@@ -210,7 +211,7 @@ class DbHandler:
                 print(self.sortIndex)
             elif user_input == '0':
                 return display_data_menu()
-        else:  # else, recursive call with last valid option
+        else:  # else, chamada recursiva com a última opção válida
             tools.input_error(user_cache)
             display_data_menu(previous_input=current_option)
 
@@ -225,41 +226,43 @@ class DbHandler:
         search_string = input("Digite o nome da cidade que deseja buscar: ")
         result = self.find_city(search_string)
 
-        # Checking if result is empty
+        # Verifica se o resultado está vazio
         if result.empty:
             print(Color.BOLD, Color.RED,
                   f"Não foi possível encontrar '{
                       search_string}' na base de dados",
                   Color.END, sep="")
         else:
-            print()  # New line
+            print()  # Nova linha
             tools.session_header(
                 "Resultado ==============================")
             print("\n", result, sep="")
 
-            # Len of string
+            # Comprimento da string
             print("\n", Color.BOLD, 45 * "=", Color.END, sep="")
 
 
 # Functions -----------------------------------------------------------
-# ------------------------------------- DataBase manipulation Functions
+# ------------------------------------- Funções de manipulação do banco de dados
 
 def read_json_to_panda():
-    """Read city_db.json file and fills the Panda's data base
+    """
+    Lê o arquivo city_db.json e preenche o banco de dados do Panda
 
     Returns:
         Data: DataBase
     """
 
-    # Write the file path to the city_db.json on db directory
+    # Escreva o caminho do arquivo para o city_db.json no diretório db
     FILE_PATH = os.path.join("db", "city_db.json")
 
-    DataBase = pd.read_json(FILE_PATH)  # Fills Panda's data base from json
+    DataBase = pd.read_json(FILE_PATH)  # Preenche o banco de dados do Panda a partir do JSON
     return DataBase
 
 
 def update_json_from_panda(data):
-    """Update json file from Panda's data abse
+    """
+    Atualiza o arquivo json a partir do banco de dados do Panda
 
     Args:
         data (data): Panda's Data Frame
@@ -273,8 +276,7 @@ def update_json_from_panda(data):
 
 
 def Clean_DB():
-    """Clear the .json file and Panda's data base
-    """
+    #Limpa o arquivo .json e o banco de dados do Panda
     FILE_PATH = os.path.join("db", "city_db.json")
     default_layout = {
         "Cidades": [
@@ -294,7 +296,7 @@ def Clean_DB():
                        )
     if user_input.lower() == 'y':
         DataBase = read_json_to_panda()
-        # Reinitialize the Data Base with these columns
+        # Reiniciliza o Banco de Dados com estas colunas
         DataBase = pd.DataFrame(columns=["Cidade", "Área", "População"])
         update_json_from_panda(DataBase)
         read_json_to_panda()
@@ -308,12 +310,13 @@ def Clean_DB():
 
 
 def add_city(name, area, pop):
-    """Add a city on the .json file
+    """
+    Adiciona uma cidade no arquivo .json
 
     Args:
-        name (str): name of the city
-        area (str): their area
-        pop (str): their population
+        nome (str): nome da cidade
+        area (str): sua área
+        pop (str): sua população
     """
     FILE_PATH = os.path.join("db", "city_db.json")
 
@@ -325,20 +328,20 @@ def add_city(name, area, pop):
 
     with open(FILE_PATH, 'r', encoding='utf-8') as file:
         try:
-            # Load the JSON data into a Python dictionary
+            # Carrega os dados JSON em um dicionário Python
             data = json.load(file)
         except json.JSONDecodeError:
-            # If the file is empty or not a valid JSON, initialize with an empty "Cidades" list
+            # Se o arquivo estiver vazio ou não for um JSON válido, inicializa com uma lista "Cidades" vazia
             data = {"Cidades": []}
 
-        # Appending new_city into "Cidades" array
+        # Adicionando nova_cidade na matriz "Cidades" (array)
         data["Cidades"].append(new_city)
 
-        # Updating the .json file.
+        # Atualizando o arquivo .json
         with open(FILE_PATH, 'w', encoding='utf-8') as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
 
-        read_json_to_panda()  # Update the Panda's Data base
+        read_json_to_panda()  # Atualiza o banco de dados do Panda
 
         print(Color.GREEN, Color.BOLD,
               "[>>] Cidade adicionada com sucesso!",
@@ -347,9 +350,9 @@ def add_city(name, area, pop):
 
 
 def is_json_empty():
-    """Verifies if a json file is empty
-    """
-    # Path to the .json files that will be verified
+    # Verifica se o arquivo JSON está vazio
+    
+    # Caminho para os arquivos .json que serão verificados
     FILE_PATH = os.path.join("db", "city_db.json")
 
 
@@ -361,12 +364,13 @@ def default_json_layout():
 
 
 def display_data_menu(previous_input=False):
-    """ Open a menu for visualize_db options, uses ShowDB class
+    """ 
+    Menu para visualizar opções do banco de dados, usa a classe ShowDB
 
     Args:
-        previous_input=False (boolean): arg set as False by default, used to recall the function
-                                        in the same option that the user previously are. (used for bug fix)
-                                        at  DbHandler.sortHandler().
+        previous_input=False (boolean): argumento configurado como False por padrão,
+        usado para chamar a função na mesma opção em que o usuário estava anteriormente.
+        (usado para corrigir bug) em DbHandler.sortHandler().
     """
     tools.clear()
     DataBase = DbHandler(read_json_to_panda())
@@ -436,12 +440,13 @@ def display_data_menu(previous_input=False):
 
     else:
         tools.input_error(user_input)
-        display_data_menu()  # Recursive call - avoid to return to main_menu()
+        display_data_menu()  # Função chamada recursivamente - evita o retorno ao menu principal
 
 
 def add_cidade_menu():
-    """" Open a menu for add cities
-    """
+    
+    # Abre um menu para adicionar cidades
+    
     DataBase = DbHandler(read_json_to_panda())
 
     cidade = ""
@@ -465,7 +470,7 @@ def add_cidade_menu():
         if user_input == "1":  # Cidade
             cidade_cache = input("Digite o nome da cidade: ")
 
-            # Check if a city already exists on data base
+            # Verifica se uma cidade já existe no banco de dados
             if not DataBase.find_city(cidade_cache).empty:
                 print(Color.RED, Color.BOLD,
                       f"Cidade '{
@@ -495,9 +500,9 @@ def add_cidade_menu():
 
         elif user_input == "4":  # Confirma
 
-            # Prevents the user from input empty field
+            # Impede que o usuário insira um campo vazio
             if cidade == "":
-                tools.empty_error("cidade")  # printa mensagem de erro
+                tools.empty_error("cidade")  # exibe mensagem de erro
                 ERROR_FLAG = 1
             if area == "":
                 tools.empty_error("área")
@@ -507,7 +512,7 @@ def add_cidade_menu():
                 ERROR_FLAG = 1
 
             if ERROR_FLAG == 0:
-                add_city(cidade, area, populacao)  # add city
+                add_city(cidade, area, populacao)  # Adiciona cidade
             else:
                 tools.confirm()
 
@@ -518,11 +523,11 @@ def add_cidade_menu():
 
 
 def main_menu():
-    tools.clear()  # Clear the screen
+    tools.clear()  # Limpa a tela
     print(ASCII_ART)
     # print(ASCII_TITLE)
 
-    # A header to identify the current section
+    # Cabeçalho para identificar a seção atual
     tools.session_header("Menu Principal")
 
     options_display = """
